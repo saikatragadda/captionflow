@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CaptionFlow — Write less. Post more.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;1,14..32,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f7f5;
+      --surface: #ffffff;
+      --surface2: #f0f2f0;
+      --border: #e4e8e4;
+      --border-focus: #22c55e;
+      --text: #111;
+      --text-secondary: #555;
+      --text-muted: #999;
+      --accent: #16a34a;
+      --accent-light: #dcfce7;
+      --accent-mid: #22c55e;
+      --radius: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Nav */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(245,247,245,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 600;
+      color: var(--text); text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+      color: #fff; letter-spacing: -0.5px;
+      box-shadow: 0 2px 8px rgba(34,197,94,0.3);
+    }
+    .nav-badge {
+      font-size: 11px; font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      border-radius: 20px; padding: 3px 10px;
+      letter-spacing: 0.02em;
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 72px 24px 52px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.09em;
+      color: var(--accent);
+      margin-bottom: 20px;
+      background: var(--accent-light);
+      padding: 5px 14px; border-radius: 20px;
+    }
+    h1 {
+      font-size: clamp(34px, 5.5vw, 54px);
+      font-weight: 600; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 16px;
+      color: #0a0a0a;
+    }
+    h1 em { font-style: italic; font-weight: 300; color: var(--accent); }
+    .hero-sub {
+      font-size: 16px; font-weight: 300;
+      color: var(--text-secondary); line-height: 1.7;
+      max-width: 420px; margin: 0 auto 44px;
+    }
+
+    /* Stats */
+    .stats {
+      display: flex; justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: var(--shadow);
+    }
+    .stat { flex: 1; padding: 16px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 20px; font-weight: 600; color: var(--accent); letter-spacing: -0.5px; }
+    .stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    /* Form */
+    .form-wrap { max-width: 600px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+    .card-title {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-muted); margin-bottom: 20px;
+    }
+
+    .field { margin-bottom: 14px; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+
+    input, select, textarea {
+      width: 100%; padding: 10px 13px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14px; font-family: 'Inter', sans-serif;
+      color: var(--text); outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      appearance: none; -webkit-appearance: none;
+    }
+    input::placeholder, textarea::placeholder { color: #bbb; }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--border-focus);
+      background: #fff;
+    }
+    textarea { resize: none; height: 82px; line-height: 1.6; }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23999' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px; cursor: pointer;
+    }
+    select option { background: #fff; }
+
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* Length toggle */
+    .toggle-group { display: flex; gap: 8px; }
+    .toggle-btn {
+      flex: 1; padding: 9px 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer; text-align: center;
+      transition: all 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .toggle-btn:hover { border-color: var(--accent-mid); color: var(--accent); }
+    .toggle-btn.active {
+      background: var(--accent-light);
+      border-color: var(--accent-mid);
+      color: var(--accent);
+    }
+
+    /* Generate button */
+    .btn {
+      width: 100%; padding: 13px;
+      background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+      color: #fff; border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      margin-top: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      box-shadow: 0 2px 12px rgba(34,197,94,0.25);
+      letter-spacing: -0.1px;
+    }
+    .btn:hover { opacity: 0.92; }
+    .btn:active { transform: scale(0.99); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Spinner */
+    .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Error */
+    .error-box {
+      display: none;
+      background: #fff5f5; border: 1px solid #fcc;
+      border-radius: var(--radius-sm); padding: 10px 14px;
+      font-size: 13px; color: #e53e3e; margin-bottom: 10px;
+    }
+
+    /* Result */
+    .result-card {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; padding: 26px 28px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+      animation: fadeUp 0.3s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 18px;
+    }
+    .result-label {
+      font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+    .copy-btn {
+      font-size: 12px; font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-light);
+      border: 1px solid #bbf7d0;
+      border-radius: 8px; padding: 5px 14px;
+      cursor: pointer; transition: background 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .copy-btn:hover { background: #bbf7d0; }
+    .result-text {
+      font-size: 14px; line-height: 1.85;
+      color: #333; white-space: pre-wrap; word-break: break-word;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center; padding: 0 0 48px;
+      font-size: 12px; color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="logo-mark">CF</div>
+      CaptionFlow
+    </a>
+    <span class="nav-badge">Beta</span>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-eyebrow">✦ Social media captions</div>
+    <h1>Write less.<br><em>Post more.</em></h1>
+    <p class="hero-sub">Turn any idea into a scroll-stopping caption for Instagram, TikTok, or LinkedIn in seconds.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">&lt;10s</div><div class="stat-lbl">Per caption</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Platforms</div></div>
+      <div class="stat"><div class="stat-num">8</div><div class="stat-lbl">Tones</div></div>
+    </div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="card">
+      <p class="card-title">Your post details</p>
+
+      <div class="field">
+        <label>Content niche</label>
+        <input id="niche" type="text" placeholder="fitness, travel, finance, food, tech..." />
+      </div>
+
+      <div class="field">
+        <label>What is this post about?</label>
+        <textarea id="topic" placeholder="e.g. my morning workout routine, 5 tips for saving money, best coffee spots in NYC..."></textarea>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Platform</label>
+          <select id="platform">
+            <option>Instagram</option>
+            <option>TikTok</option>
+            <option>LinkedIn</option>
+            <option>All platforms</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tone</label>
+          <select id="tone">
+            <option>Casual & fun</option>
+            <option>Professional</option>
+            <option>Inspirational</option>
+            <option>Witty & humorous</option>
+            <option>Storytelling</option>
+            <option>Educational / Tips</option>
+            <option>Controversial / Hot take</option>
+            <option>Motivational</option>
+            <option>Promotional / Selling</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Caption length</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" onclick="setLength('short', this)">Short</button>
+          <button class="toggle-btn active" onclick="setLength('medium', this)">Medium</button>
+          <button class="toggle-btn" onclick="setLength('long', this)">Long</button>
+        </div>
+      </div>
+
+      <div class="error-box" id="error"></div>
+
+      <button class="btn" id="generateBtn" onclick="generate()">
+        <span id="btnText">Generate captions →</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-header">
+        <span class="result-label">Your captions</span>
+        <button class="copy-btn" onclick="copyResult()">Copy all</button>
+      </div>
+      <div class="result-text" id="resultText"></div>
+    </div>
+
+    <div class="footer">CaptionFlow &mdash; Write less. Post more.</div>
+  </div>
+
+  <script>
+    let captionLength = 'medium';
+
+    function setLength(len, el) {
+      captionLength = len;
+      document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    async function generate() {
+      const niche    = document.getElementById('niche').value.trim();
+      const topic    = document.getElementById('topic').value.trim();
+      const platform = document.getElementById('platform').value;
+      const tone     = document.getElementById('tone').value;
+      const btn      = document.getElementById('generateBtn');
+      const btnText  = document.getElementById('btnText');
+      const spinner  = document.getElementById('spinner');
+      const errorBox = document.getElementById('error');
+      const resultCard = document.getElementById('resultCard');
+      const resultText = document.getElementById('resultText');
+
+      errorBox.style.display = 'none';
+      if (!niche || !topic) {
+        errorBox.textContent = 'Please fill in your niche and post topic.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      spinner.style.display = 'block';
+      resultCard.style.display = 'none';
+
+      try {
+        const res = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ niche, topic, platform, tone, length: captionLength })
+        });
+        const data = await res.json();
+        if (data.error) {
+          errorBox.textContent = data.error;
+          errorBox.style.display = 'block';
+        } else {
+          resultText.textContent = data.result;
+          resultCard.style.display = 'block';
+          resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } catch (e) {
+        errorBox.textContent = 'Something went wrong. Please try again.';
+        errorBox.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        spinner.style.display = 'none';
+      }
+    }
+
+    function copyResult() {
+      const text = document.getElementById('resultText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy all', 2000);
+      });
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) generate();
+    });
+  </script>
+</body>
+</html>
