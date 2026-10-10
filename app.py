@@ -3,11 +3,11 @@ import anthropic
 import os
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY", "captionflow-secret-2026")
+app.secret_key = os.environ["SECRET_KEY"]
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
-ACCESS_PASSWORD = os.environ.get("ACCESS_PASSWORD", "captionflow2026")
+ACCESS_PASSWORD = os.environ["ACCESS_PASSWORD"]
 
 PLATFORM_RULES = {
     "Instagram":     "Use line breaks for readability. Add a call-to-action. Include 20-25 relevant hashtags at the end.",
@@ -81,7 +81,8 @@ No extra commentary, no explanations — just the captions, ready to copy and po
         )
         return jsonify({"result": message.content[0].text})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        app.logger.error(f"Anthropic API error: {e}")
+        return jsonify({"error": "Something went wrong generating captions. Please try again."}), 500
 
 if __name__ == "__main__":
     app.run(debug=True)
